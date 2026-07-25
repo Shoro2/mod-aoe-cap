@@ -1,0 +1,93 @@
+#
+# This file is part of the AzerothCore Project. See AUTHORS file for Copyright information
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+
+########################################
+# mod-aoe-cap configuration
+########################################
+#
+# An optional target cap for area spells whose spell data leaves them
+# uncapped. Ships DISABLED. Every value below is re-read by `.reload config`,
+# so the module can be switched on and off without a restart.
+#
+# ------------------------------------------------------------------------
+# READ THIS BEFORE ENABLING
+# ------------------------------------------------------------------------
+# The core trims an over-long target list with a RANDOM resize, not by
+# distance. A module cannot change that. So a low cap does not mean
+# "hit the nearest N" — it means "hit N at random", and mobs standing
+# directly in front of the caster will regularly take no damage at all.
+#
+# Treat this as a safety limit with a HIGH value, not as a balance lever
+# with a low one. A cap of 99 on a 960-mob pull ignores ~90 % of the pull
+# on every cast, at random, and will feel broken rather than merely slower.
+#
+# Measured context (baseline M0, 2026-07-25): a 960-creature pull with a
+# full loot drain held the world tick at 7 ms mean / 23 ms max with the
+# worldserver at 35 % of one core. The server did not need a cap. This is
+# here for a situation measurement has not yet demonstrated.
+#
+
+#
+#    AoECap.Enable
+#        Description: Master switch.
+#        Default:     0 - (Disabled, spell data decides every limit)
+#                     1 - (Enabled)
+#
+
+AoECap.Enable = 0
+
+#
+#    AoECap.MaxTargets
+#        Description: Target limit applied to area spells that declare no limit
+#                     of their own. Spells that already declare a limit are
+#                     never modified. 0 also disables the module.
+#        Default:     250
+#
+
+AoECap.MaxTargets = 250
+
+#
+#    AoECap.HarmfulOnly
+#        Description: Only cap harmful spells. Keep this enabled unless you
+#                     truly intend to truncate group heals and raid buffs.
+#        Default:     1 - (Enabled)
+#
+
+AoECap.HarmfulOnly = 1
+
+#
+#    AoECap.PlayerCastersOnly
+#        Description: Only cap spells cast by players (pets, totems and charmed
+#                     units resolve to their player owner). Leaves creature and
+#                     boss abilities alone.
+#        Default:     1 - (Enabled)
+#
+
+AoECap.PlayerCastersOnly = 1
+
+#
+#    AoECap.DungeonsOnly
+#        Description: Restrict the cap to dungeon and raid maps.
+#        Default:     0 - (Disabled, applies everywhere)
+#
+
+AoECap.DungeonsOnly = 0
+
+#
+#    AoECap.LogEveryNth
+#        Description: Emit one summary line to the `module` logger every Nth
+#                     capped cast. 0 disables logging entirely. Never logs once
+#                     per cast — that would cost more than the cap saves.
+#        Default:     0 - (Disabled)
+#
+
+AoECap.LogEveryNth = 0
