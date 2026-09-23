@@ -56,6 +56,7 @@
  */
 
 #include "Config.h"
+#include "GameObject.h"
 #include "Log.h"
 #include "Map.h"
 #include "Player.h"
@@ -142,7 +143,13 @@ public:
         if (conf_HarmfulOnly && info->IsPositive())
             return;
 
-        Unit* caster = spell->GetCaster();
+        // AzerothCore #27627 made Spell::GetCaster() a WorldObject*. A GameObject caster counts
+        // as its owner, as the trigger creature it used to cast through did (a player's trap).
+        WorldObject* casterObject = spell->GetCaster();
+        Unit* caster = casterObject ? casterObject->ToUnit() : nullptr;
+        if (!caster && casterObject)
+            if (GameObject* go = casterObject->ToGameObject())
+                caster = go->GetOwner();
         if (!caster)
             return;
 
